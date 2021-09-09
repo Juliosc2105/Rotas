@@ -6,12 +6,13 @@ console.log("Bem vindo a versão beta do meu sistema de Rotas")
 console.log()
 
 //Declarando variáveis
-var conversor = 0
+var conversor, aux = 0
 var endereco = ['first']
 var distancia = ['first']
+var ligado = true
 
 //Coletando os primeiros dados
-endereco[0] = readline.question(`Digite o primeiro endereco: `)
+/*endereco[0] = readline.question(`Digite o primeiro endereco: `)
 endereco[endereco.length] = readline.question(`Digite o segundo endereco: `)
 endereco[endereco.length] = readline.question(`Mais um endereco `)
 
@@ -19,13 +20,13 @@ endereco[endereco.length] = readline.question(`Mais um endereco `)
 console.log()
 console.log(`os endereços foram:`)
 console.log(`${endereco[0]}, ${endereco[1]}, ${endereco[2]}`)
-console.log()
+console.log()*/
 
 //Função que faz a coleta de dados
 async function robo()
 { 
-    const browser = await puppeteer.launch({headless: true, });
-    for (var i = 0; i < 2; i++)
+    const browser = await puppeteer.launch({headless: false, });
+    for (var i = 0; i < aux; i++)
     {
         const page = await browser.newPage();
         await page.goto('https://www.google.com.br/maps/dir///@-21.2144642,-50.3998166,15z/data=!4m2!4m1!3e0', {waitUntil: 'domcontentloaded'});
@@ -57,11 +58,25 @@ function testar()
     console.log(`soma das distâncias ${(distancia[0]+distancia[1])}`)
 }
 
+async function cadastro()
+{
+    while(ligado == true)
+    {
+        endereco[aux] = readline.question(`Digite o endereço: `)
+        aux++
+        if (aux > 1)
+        {
+            robo()
+        }
+    }
+}
+
+cadastro()
 //Chamando a função Robo
-robo()
-.then((value) => {
+//robo()
+/*.then((value) => {
     console.log('Executado com sucesso!')
     process.exit()
 
 })
-.catch((error) => console.log(error));
+.catch((error) => console.log(error));*/
