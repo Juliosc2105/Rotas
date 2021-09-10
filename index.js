@@ -1,25 +1,55 @@
 const puppeteer = require('puppeteer');
 const readline = require('readline-sync');
 
+
+//Declarando variáveis
+var conversor = 0
+var endereco = []
+var distancia = []
+
 //Saudações
 console.log("Bem vindo a versão beta do meu sistema de Rotas")
 console.log()
 
-//Declarando variáveis
-var conversor = 0
-var endereco = ['first']
-var distancia = ['first']
 
-//Coletando os primeiros dados
+//Coletando os primeiros endereços
 endereco[0] = readline.question(`Digite o primeiro endereco: `)
-endereco[endereco.length] = readline.question(`Digite o segundo endereco: `)
-endereco[endereco.length] = readline.question(`Mais um endereco `)
+endereco.push(readline.question(`Digite o segundo endereco: `))
+endereco.push(readline.question(`Mais um endereco `))
 
-//Confirmando a coleta de dados
+//Confirmando a coleta de endereços
 console.log()
 console.log(`os endereços foram:`)
-console.log(`${endereco[0]}, ${endereco[1]}, ${endereco[2]}`)
+for (let i in endereco)
+{
+    console.log(endereco[i])
+}
 console.log()
+
+//Chamando a função Robo
+robo()
+.then((value) => {
+    console.log('Executado com sucesso!')
+    process.exit()  
+})
+.catch((error) => {
+    console.log(error)
+})
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+
+//Função que converte o dado bruto em float
+function ConverterParaNumero(valor)
+{
+    return Number.parseFloat((valor.slice(0, valor.indexOf(' '))).replace(',','.'))
+}
+
+//Só para testar mesmo kkkk
+function testar()
+{
+    console.log(`soma das distâncias ${(distancia[0]+distancia[1])}`)
+}
+
 
 //Função que faz a coleta de dados
 async function robo()
@@ -38,30 +68,8 @@ async function robo()
         await page.waitForSelector("div.xB1mrd-T3iPGc-trip-tUvA6e > div")
         distancia[i] = await page.$eval("div.xB1mrd-T3iPGc-trip-tUvA6e > div", (el) => el.innerHTML)
         await page.close()
-        ConverterParaNumero()
+        distancia[i] = ConverterParaNumero(distancia[i])
         console.log(`A distância é de: ${distancia[i]}`)
     }
     testar()
 }
-
-//Função que converte o dado bruto em float
-function ConverterParaNumero()
-{
-    distancia[conversor] = Number.parseFloat((distancia[conversor].slice(0, distancia[conversor].indexOf(' '))).replace(',','.'))
-    conversor++
-}
-
-//Só para testar mesmo kkkk
-function testar()
-{
-    console.log(`soma das distâncias ${(distancia[0]+distancia[1])}`)
-}
-
-//Chamando a função Robo
-robo()
-.then((value) => {
-    console.log('Executado com sucesso!')
-    process.exit()
-
-})
-.catch((error) => console.log(error));
