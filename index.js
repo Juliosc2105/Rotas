@@ -4,6 +4,7 @@ const readline = require('readline-sync');
 
 //Declarando variáveis
 var endereco = []
+var horário = []
 var distancia = []
 var ligado = true
 
@@ -58,7 +59,13 @@ async function gerenciador ()
 {
     while (ligado == true)
     {
+        //Coletando a Distância com o usuário
         endereco.push(readline.question(`Digite um endereco: `))
+        horário.push(new Date())
+        for (let i in horário)
+        {
+            console.log(`Os minutos em que o endereco ${endereco[i]}, entrou no sistema foi: ${horário[i].getMinutes()}`)
+        }
         console.log(endereco)
         if (endereco.length > 1)
         {

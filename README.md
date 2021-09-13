@@ -12,7 +12,7 @@ To-do list:
 - [x] Automatizar entrada de rotas com ReadLine
 - [x] Definir ID para conjuntos de endereços
 - [x] Checar e converter quando a distância for em metros
-- [ ] Definir horário em que o endereço entrou no sistema
+- [x] Definir horário em que o endereço entrou no sistema
 - [ ] Criar variáveis que servirão de critério para definir as rotas
 - [ ] Desenvolver "Cérebro" que define rotas
 - [ ] Desenvolver forma de armazenar as rotas
