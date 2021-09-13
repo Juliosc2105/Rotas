@@ -3,19 +3,21 @@ const readline = require('readline-sync');
 
 
 //Declarando variáveis
-var conversor = 0
 var endereco = []
 var distancia = []
+var ligado = true
+var teste = 0
+
 
 //Saudações
 console.log("Bem vindo a versão beta do meu sistema de Rotas")
 console.log()
-
+coleta()
 
 //Coletando os primeiros endereços
-endereco[0] = readline.question(`Digite o primeiro endereco: `)
+/*endereco[0] = readline.question(`Digite o primeiro endereco: `)
 endereco.push(readline.question(`Digite o segundo endereco: `))
-endereco.push(readline.question(`Mais um endereco `))
+endereco.push(readline.question(`Mais um endereco `))*/
 
 //Confirmando a coleta de endereços
 console.log()
@@ -27,14 +29,14 @@ for (let i in endereco)
 console.log()
 
 //Chamando a função Robo
-robo()
+/*funcaoDistancia()
 .then((value) => {
     console.log('Executado com sucesso!')
-    process.exit()  
+    //process.exit()  
 })
 .catch((error) => {
     console.log(error)
-})
+})*/
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 
@@ -52,24 +54,45 @@ function testar()
 
 
 //Função que faz a coleta de dados
-async function robo()
+async function funcaoDistancia(foco, interesse)
 { 
     const browser = await puppeteer.launch({headless: true, });
-    for (var i = 0; i < 2; i++)
+    const page = await browser.newPage();
+    await page.goto('https://www.google.com.br/maps/dir///@-21.2144642,-50.3998166,15z/data=!4m2!4m1!3e0', {waitUntil: 'domcontentloaded'});
+    await page.waitForSelector('#sb_ifc50')
+    await page.type ('#sb_ifc50', `${endereco[foco]}`)
+    await page.keyboard.press("Tab")
+    await page.keyboard.press("Tab")
+    await page.type ('div#sb_ifc51', `${endereco[interesse]}`)
+    await page.keyboard.press("Enter", {waitUntil: 'networkidle2'})
+    await page.waitForSelector("div.xB1mrd-T3iPGc-trip-tUvA6e > div")
+    distancia[teste] = await page.$eval("div.xB1mrd-T3iPGc-trip-tUvA6e > div", (el) => el.innerHTML)
+    await page.close()
+    distancia[teste] = ConverterParaNumero(distancia[teste])
+    console.log(`A distância é de: ${distancia[teste]}`)
+    //testar()
+}
+
+async function coleta ()
+{
+    while (ligado == true)
     {
-        const page = await browser.newPage();
-        await page.goto('https://www.google.com.br/maps/dir///@-21.2144642,-50.3998166,15z/data=!4m2!4m1!3e0', {waitUntil: 'domcontentloaded'});
-        await page.waitForSelector('#sb_ifc50')
-        await page.type ('#sb_ifc50', `${endereco[0]}`)
-        await page.keyboard.press("Tab")
-        await page.keyboard.press("Tab")
-        await page.type ('div#sb_ifc51', `${endereco[i+1]}`)
-        await page.keyboard.press("Enter", {waitUntil: 'networkidle2'})
-        await page.waitForSelector("div.xB1mrd-T3iPGc-trip-tUvA6e > div")
-        distancia[i] = await page.$eval("div.xB1mrd-T3iPGc-trip-tUvA6e > div", (el) => el.innerHTML)
-        await page.close()
-        distancia[i] = ConverterParaNumero(distancia[i])
-        console.log(`A distância é de: ${distancia[i]}`)
+        endereco.push(readline.question(`Digite um endereco: `))
+        console.log(endereco)
+        if (endereco.length > 1)
+        {
+            for(let i = 1; i < endereco.length; i++)
+            {
+                await (distancia[(i - 1)] = funcaoDistancia((endereco.length-1), (i - 1)))
+            }
+        }
+        let continuar = readline.question('Quer continuar?')
+        if (continuar != 'sim')
+        {
+            ligado = false
+        }else
+        {
+            ligado = true
+        }
     }
-    testar()
 }
