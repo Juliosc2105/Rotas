@@ -6,25 +6,15 @@ const readline = require('readline-sync');
 var endereco = []
 var distancia = []
 var ligado = true
-var teste = 0
-
 
 //Saudações
+console.log
 console.log("Bem vindo a versão beta do meu sistema de Rotas")
 console.log()
-coleta()
 
+gerenciador()
 
-//Confirmando a coleta de endereços
-/*console.log()
-console.log(`os endereços foram:`)
-for (let i in endereco)
-{
-    console.log(endereco[i])
-}
-console.log()*/
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=    FUNCÕES     -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 
 //Função que converte o dado bruto em float
 function ConverterParaNumero(valor)
@@ -57,12 +47,14 @@ async function funcaoDistancia(foco, interesse)
     console.log(`A distância é de: ${distancia[IdDistancia(foco, interesse)]} km`)
 }
 
+//Define um ID para cada conjunto de endereços
 function IdDistancia (primeiro, segundo)
 {
     return Number.parseFloat((primeiro.toString())+(segundo.toString()))
 }
 
-async function coleta ()
+//Gerencia entrada de dados, chamadas de funções de processamento e retorno de valores finais
+async function gerenciador ()
 {
     while (ligado == true)
     {
