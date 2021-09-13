@@ -14,44 +14,29 @@ console.log("Bem vindo a versão beta do meu sistema de Rotas")
 console.log()
 coleta()
 
-//Coletando os primeiros endereços
-/*endereco[0] = readline.question(`Digite o primeiro endereco: `)
-endereco.push(readline.question(`Digite o segundo endereco: `))
-endereco.push(readline.question(`Mais um endereco `))*/
 
 //Confirmando a coleta de endereços
-console.log()
+/*console.log()
 console.log(`os endereços foram:`)
 for (let i in endereco)
 {
     console.log(endereco[i])
 }
-console.log()
-
-//Chamando a função Robo
-/*funcaoDistancia()
-.then((value) => {
-    console.log('Executado com sucesso!')
-    //process.exit()  
-})
-.catch((error) => {
-    console.log(error)
-})*/
+console.log()*/
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 
 //Função que converte o dado bruto em float
 function ConverterParaNumero(valor)
 {
-    return Number.parseFloat((valor.slice(0, valor.indexOf(' '))).replace(',','.'))
+    if (valor.slice((valor.indexOf(' ')) + 1) == 'm')
+    {
+        return (Number.parseFloat((valor.slice(0, valor.indexOf(' '))).replace(',','.')))/1000
+    }else if (valor.slice((valor.indexOf(' ')) + 1) == 'km')
+    {
+        return Number.parseFloat((valor.slice(0, valor.indexOf(' '))).replace(',','.'))
+    }
 }
-
-//Só para testar mesmo kkkk
-function testar()
-{
-    console.log(`soma das distâncias ${(distancia[0]+distancia[1])}`)
-}
-
 
 //Função que faz a coleta de dados
 async function funcaoDistancia(foco, interesse)
@@ -66,11 +51,15 @@ async function funcaoDistancia(foco, interesse)
     await page.type ('div#sb_ifc51', `${endereco[interesse]}`)
     await page.keyboard.press("Enter", {waitUntil: 'networkidle2'})
     await page.waitForSelector("div.xB1mrd-T3iPGc-trip-tUvA6e > div")
-    distancia[teste] = await page.$eval("div.xB1mrd-T3iPGc-trip-tUvA6e > div", (el) => el.innerHTML)
+    distancia[IdDistancia(foco, interesse)] = await page.$eval("div.xB1mrd-T3iPGc-trip-tUvA6e > div", (el) => el.innerHTML)
     await page.close()
-    distancia[teste] = ConverterParaNumero(distancia[teste])
-    console.log(`A distância é de: ${distancia[teste]}`)
-    //testar()
+    distancia[IdDistancia(foco, interesse)] = ConverterParaNumero(distancia[IdDistancia(foco, interesse)])
+    console.log(`A distância é de: ${distancia[IdDistancia(foco, interesse)]} km`)
+}
+
+function IdDistancia (primeiro, segundo)
+{
+    return Number.parseFloat((primeiro.toString())+(segundo.toString()))
 }
 
 async function coleta ()
@@ -89,7 +78,13 @@ async function coleta ()
         let continuar = readline.question('Quer continuar?')
         if (continuar != 'sim')
         {
-            ligado = false
+            console.log(`As distâncias foram:`)
+            console.log(distancia)
+            for (let i in distancia)
+            {
+                console.log(distancia[i])
+            }
+            process.exit()
         }else
         {
             ligado = true
