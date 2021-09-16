@@ -8,10 +8,20 @@ var horário = []
 var distancia = []
 var ligado = true
 
+//Variáveis do Cérebro
+var rotas = []
+
+
+
+    //Aguardando implementação
+        //const tempoMaximo
+        //const quantidadeMaxima
+
 //Saudações
-console.log
+console.log()
 console.log("Bem vindo a versão beta do meu sistema de Rotas")
 console.log()
+const distanciaMaxima = (readline.question('Qual a distancia maxima: '))
 
 gerenciador()
 
@@ -45,7 +55,8 @@ async function funcaoDistancia(foco, interesse)
     distancia[IdDistancia(foco, interesse)] = await page.$eval("div.xB1mrd-T3iPGc-trip-tUvA6e > div", (el) => el.innerHTML)
     await page.close()
     distancia[IdDistancia(foco, interesse)] = ConverterParaNumero(distancia[IdDistancia(foco, interesse)])
-    console.log(`A distância é de: ${distancia[IdDistancia(foco, interesse)]} km`)
+    console.log(`A distância entre ${endereco[foco]} e ${endereco[interesse]} é de ${distancia[IdDistancia(foco, interesse)]} km`)
+    cerebro(foco, interesse)
 }
 
 //Define um ID para cada conjunto de endereços
@@ -60,25 +71,29 @@ async function gerenciador ()
     while (ligado == true)
     {
         //Coletando a Distância com o usuário
-        endereco.push(readline.question(`Digite um endereco: `))
-        horário.push(new Date())
-        for (let i in horário)
+        endereco.push(readline.question(`Digite um endereco: `)) //coletando o endereço
+        /*rotas.push(new Array) //Criando primeira rota
+        rotas[0][0] = endereco[0]*/ //Colocando primeiro endereço na primeira rota
+        horário.push(new Date())                                 //Coletando a hora em que entrou o endereço
+        /*for (let i in horário) //Imprimindo o horário em que cada pedido entrou
         {
             console.log(`Os minutos em que o endereco ${endereco[i]}, entrou no sistema foi: ${horário[i].getMinutes()}`)
-        }
-        console.log(endereco)
-        if (endereco.length > 1)
+        }*/
+        console.log(endereco) //Imprimindo o vetor com os endereços
+
+        if (endereco.length > 1) //Verificando se há mais de um endereço
         {
-            for(let i = 1; i < endereco.length; i++)
+            for(let i = 1; i < endereco.length; i++) //looping para comparar os endereços
             {
                 await (distancia[(i - 1)] = funcaoDistancia((endereco.length-1), (i - 1)))
+                
             }
         }
-        let continuar = readline.question('Quer continuar?')
+
+        let continuar = readline.question('Quer continuar?') //Interação com o usuário para continuar
         if (continuar != 'sim')
         {
             console.log(`As distâncias foram:`)
-            console.log(distancia)
             for (let i in distancia)
             {
                 console.log(distancia[i])
@@ -89,4 +104,38 @@ async function gerenciador ()
             ligado = true
         }
     }
+}
+
+function cerebro(a, b)
+{
+    console.log('teste 1')
+    if(distancia[IdDistancia(a, b)] <= distanciaMaxima)
+    {
+        console.log('teste sim')
+        rotas.push(new Array)
+        rotas[(rotas.length)-1] = [endereco[b], endereco[a]]
+    }else
+    {
+        console.log('teste não')
+        for(let i = 0; i < rotas.length; i++)
+        {
+            console.log('teste 2')
+            for(let j in rotas)
+            {
+                console.log('teste 3')
+                console.log(`i = ${i}, j = ${j}`)
+                if(rotas[i][j] = endereco[b])
+                {
+                    console.log('teste 3 sim')
+                    console.log(`já tem ${endereco[b]}`) 
+                }else
+                {
+                    console.log('teste 3 não')
+                    rotas.push(new Array)
+                    rotas[(rotas.length)-1] = [endereco[b]]
+                }
+            }
+        } 
+    }
+    console.log(rotas)
 }
