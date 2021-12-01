@@ -1,4 +1,4 @@
-/*import Distancia from './teste'*/
+const Distancia = import('./teste')
 
 let numeroRota = 0
 var endereco = []
